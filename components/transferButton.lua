@@ -58,11 +58,11 @@ function TransferButton:OnEnter ()
 		GameTooltip:SetText(TRANSFER)
 		
 		if withdraws > 0 then
-			GameTooltip:AddLine(format('%d withdraw', withdraws), 1,1,1)
+			GameTooltip:AddLine(format(L.NumWithdraw, withdraws), 1,1,1)
 		end
 		
 		if deposits > 0 then
-			GameTooltip:AddLine(format('%d deposit', deposits), 1,1,1)
+			GameTooltip:AddLine(format(L.NumDeposit, deposits), 1,1,1)
 		end
 		
 		GameTooltip:Show()

@@ -34,7 +34,7 @@ StaticPopupDialogs['BAGNON_CANNOT_PURCHASE_VAULT'] = {
 }
 
 StaticPopupDialogs['BAGNON_COMFIRM_TRANSFER'] = {
-	text = 'Depositing these items will remove all modifications and make them non-tradeable and non-refundable.|n|nDo you wish to continue?',
+	text = L.ConfirmTransfer,
 	button1 = YES,
 	button2 = NO,
 	
