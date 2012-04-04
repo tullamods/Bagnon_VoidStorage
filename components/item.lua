@@ -50,8 +50,14 @@ function ItemSlot:OnClick (button)
 		if isRight and self:IsLocked() then
 			ClickVoidTransferWithdrawalSlot(self.withdrawSlot, true)
 		else
+			for i = 1,9 do
+				if not GetVoidTransferWithdrawalInfo(i) then
+					self.withdrawSlot = i
+					break
+				end
+			end
+			
 			ClickVoidStorageSlot(self:GetID(), isRight)
-			self.withdrawSlot = GetNumVoidTransferWithdrawal()
 		end
 	end
 end
@@ -103,7 +109,7 @@ function ItemSlot:IsQuestItem()
 end
 
 function ItemSlot:GetInfo()
-	local id, icon, locked = self:RequestInfo()
+	local id, icon, locked = self:RetrieveInfo()
 	local link, quality
 	
 	if id then
@@ -113,13 +119,21 @@ function ItemSlot:GetInfo()
 	return icon, 1, locked, quality, nil, nil, link
 end
 
-function ItemSlot:RequestInfo()
+function ItemSlot:RetrieveInfo()
 	if self.bag == 'vault' then
 		return Bagnon.ItemSlot.GetInfo(self)
-	elseif self.bag then
-		return GetVoidTransferDepositInfo(self:GetID())
 	else
-		return GetVoidTransferWithdrawalInfo(self:GetID())
+		local get = self.bag and GetVoidTransferDepositInfo or GetVoidTransferWithdrawalInfo
+		local count = self:GetID()
+		
+		for i = 1,9 do
+			if get(i) then
+				count = count - 1
+				if count == 0 then
+					return get(i)
+				end
+			end
+		end
 	end
 end
 

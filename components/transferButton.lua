@@ -3,6 +3,7 @@
 		A void storage transfer button
 --]]
 
+local L = LibStub('AceLocale-3.0'):GetLocale('Bagnon-VoidStorage')
 local Bagnon = LibStub('AceAddon-3.0'):GetAddon('Bagnon')
 local TransferButton = Bagnon:NewClass('TransferButton', 'Button', Bagnon.MoneyFrame)
 

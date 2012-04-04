@@ -10,6 +10,7 @@ local Frame = Bagnon:NewClass('VaultFrame', 'Frame', Bagnon.Frame)
 --[[ Events ]]--
 
 function Frame:OnShow()
+	IsVoidStorageReady()
 	PlaySound('UI_EtherealWindow_Open')
 
 	self:UpdateLook()
