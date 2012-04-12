@@ -3,6 +3,7 @@
 --]]
 
 local L = LibStub('AceLocale-3.0'):NewLocale('Bagnon-VoidStorage', 'ptBR')
+if not L then return end
 
 L.ConfirmTransfer = 'Depositar estes itens irá remover todas as suas modificações e torná-los não-comerciáveis.|n|nDeseja continuar?'
 L.PurchaseDialog = 'Deseja destravar o Cofre Etéreo?|n|n|cffffd200Custo:|r %s'

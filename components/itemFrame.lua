@@ -100,6 +100,6 @@ end
 
 --[[ Proprieties ]]--
 
-function ItemFrame:HasRowLayout()
+function ItemFrame:HasColumnLayout()
 	return self.kind ~= 'vault'
 end
