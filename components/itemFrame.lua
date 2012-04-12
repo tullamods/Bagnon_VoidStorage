@@ -5,7 +5,6 @@
 
 local Bagnon = LibStub('AceAddon-3.0'):GetAddon('Bagnon')
 local ItemFrame = Bagnon:NewClass('VaultItemFrame', 'Button', Bagnon.ItemFrame)
-ItemFrame.USE_COLUMN_LAYOUT = true
 
 
 --[[ Events ]]--
@@ -96,4 +95,11 @@ function ItemFrame:GetNumSlots()
 	else
 		return GetNumVoidTransferWithdrawal()
 	end
+end
+
+
+--[[ Proprieties ]]--
+
+function ItemFrame:HasRowLayout()
+	return self.kind ~= 'vault'
 end
