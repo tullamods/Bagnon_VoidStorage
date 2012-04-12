@@ -8,7 +8,7 @@ if not L then return end
 L.ConfirmTransfer = 'Die Einlagerung der Gegenst\195\164nde wird alle Modifikationen entfernen und die Gegenst\195\164nde sind danach nicht mehr handelbar oder umtauschbar.|n|nWeiter?'
 L.PurchaseDialog = 'Möchten Sie das Leerenlager aktivieren?|n|n|cffffd200Kosten:|r %s'
 L.CannotPurchaseDialog = 'Das verfügbare Gold reicht nicht um das Leerenlager zu aktivieren|n|n|cffff2020Kosten:|r %s'
-L.AskMafia = 'Frag die Mafia'
+L.AskMafia = 'Mafia Fragen'
 
 L.Title = [[%s's Leerenlager]]
 L.NumDeposit = '%d Einlagerung'
