@@ -47,7 +47,7 @@ function ItemSlot:OnClick (button)
 	elseif self.bag == 'vault' then
 		local isRight = button == 'RightButton'
 		
-		if isRight and self:IsLocked() then
+		if isRight and self:IsLocked() and self.withdrawSlot then
 			ClickVoidTransferWithdrawalSlot(self.withdrawSlot, true)
 		else
 			for i = 1,9 do
