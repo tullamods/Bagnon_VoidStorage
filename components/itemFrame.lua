@@ -1,6 +1,9 @@
 --[[
 	itemFrame.lua
-		A void storage item frame
+		A void storage item frame. Three kinds:
+			"vault" -> deposited items
+			true -> items to deposit
+			false -> items to withdraw
 --]]
 
 local Bagnon = LibStub('AceAddon-3.0'):GetAddon('Bagnon')

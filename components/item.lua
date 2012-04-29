@@ -13,8 +13,8 @@ ItemSlot.unused = {}
 
 function ItemSlot:Create()
 	local item = Bagnon.ItemSlot.Create(self)
-	item:SetScript('OnReceiveDrag', self.OnReceiveDrag)
-	item:SetScript('OnDragStart', self.OnDragStart)
+	item:SetScript('OnReceiveDrag', self.OnDrag)
+	item:SetScript('OnDragStart', self.OnDrag)
 	item:SetScript('OnClick', self.OnClick)
 	item:RegisterForDrag('LeftButton')
 	item:RegisterForClicks('anyUp')
@@ -62,7 +62,7 @@ function ItemSlot:OnClick (button)
 	end
 end
 
-function ItemSlot:OnDragStart()
+function ItemSlot:OnDrag()
 	self:OnClick('LeftButton')
 end
 

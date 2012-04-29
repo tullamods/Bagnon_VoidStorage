@@ -18,6 +18,10 @@ function TransferButton:New (...)
 	local b = CreateFrame('Button', nil, f)
 	b:SetPoint('RIGHT', self.ICON_SIZE - 3, 0)
 	b:SetSize(self.ICON_SIZE, self.ICON_SIZE)
+	
+	b:SetScript('OnClick', function() f:OnClick() end)
+	b:SetScript('OnEnter', function() f:OnEnter() end)
+	b:SetScript('OnLeave', function() f:OnLeave() end)
 
 	local pt = b:CreateTexture()
 	pt:SetTexture([[Interface\Buttons\UI-Quickslot-Depress]])
@@ -36,7 +40,6 @@ function TransferButton:New (...)
 	f.icon = icon
 	f.info = MoneyTypeInfo["STATIC"]
 	f:SetHeight(self.ICON_SIZE + self.ICON_OFF * 2)
-	f:AddClickFrame(b)
 	f:UpdateValue()
 	return f
 end
