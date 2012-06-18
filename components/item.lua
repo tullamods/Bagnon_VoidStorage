@@ -46,9 +46,10 @@ function ItemSlot:OnClick (button)
 		end
 	elseif self.bag == 'vault' then
 		local isRight = button == 'RightButton'
+		local type, _, link = GetCursorInfo()
 		local cursor = self.Cursor
 		
-		if not isRight and cursor and CursorHasItem() then
+		if not isRight and cursor and type == 'item' and link == cursor:GetItem() then
 			cursor:GetScript('OnMouseDown')(cursor, 'RightButton') -- simulates a click on the button, less code to maintain
 			cursor:GetScript('OnClick')(cursor, 'RightButton')
 		
