@@ -50,7 +50,7 @@ function ItemSlot:OnClick (button)
 		local cursor = self.Cursor
 		
 		if not isRight and cursor and type == 'item' and link == cursor:GetItem() then
-			cursor:GetScript('OnMouseDown')(cursor, 'RightButton') -- simulates a click on the button, less code to maintain
+			cursor:GetScript('PreClick')(cursor, 'RightButton') -- simulates a click on the button, less code to maintain
 			cursor:GetScript('OnClick')(cursor, 'RightButton')
 		
 		elseif isRight and self:IsLocked() and self.withdrawSlot then
