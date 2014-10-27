@@ -11,35 +11,16 @@ ItemSlot.unused = {}
 
 --[[ Constructor ]]--
 
-function ItemSlot:SetFrame(parent, bag, slot)
-	self:SetParent(parent)
-	self:SetID(slot)
-	self.bag = bag
-end
-
 function ItemSlot:Create()
 	local item = Bagnon.ItemSlot.Create(self)
-	item:SetScript('OnReceiveDrag', self.OnDrag)
-	item:SetScript('OnDragStart', self.OnDrag)
-	item:SetScript('OnClick', self.OnClick)
-	item:RegisterForDrag('LeftButton')
-	item:RegisterForClicks('anyUp')
+	item:SetScript('OnReceiveDrag', self.OnDragStart)
 	return item
-end
-
-
-function ItemSlot:ConstructNewItemSlot(id)
-	return CreateFrame('Button', 'BagnonVaultItemSlot' .. id, nil, 'ContainerFrameItemButtonTemplate')
-end
-
-function ItemSlot:CanReuseBlizzardBagSlots()
-	return nil
 end
 
 
 --[[ Click Events ]]--
 
-function ItemSlot:OnClick (button)	
+function ItemSlot:OnClick(button)	
 	if IsModifiedClick() then
 		local link = self:GetItem()
 		if link then
@@ -70,7 +51,7 @@ function ItemSlot:OnClick (button)
 	end
 end
 
-function ItemSlot:OnDrag()
+function ItemSlot:OnDragStart()
 	self:OnClick('LeftButton')
 end
 
@@ -79,7 +60,7 @@ end
 
 function ItemSlot:ShowTooltip()
 	if self.bag == 'vault' then
-		GameTooltip:SetVoidItem(self:GetID())
+		GameTooltip:SetVoidItem(1, self:GetID())
 	elseif self.bag then
 		GameTooltip:SetVoidDepositItem(self:GetID())
 	else
@@ -92,17 +73,40 @@ function ItemSlot:ShowTooltip()
 end
 
 
---[[ Fake Methods ]]--
-
-function ItemSlot:UpdateSlotColor() end
-function ItemSlot:UpdateCooldown() end
-
-
 --[[ Proprieties ]]--
 
 function ItemSlot:IsCached()
 	-- delicious hack: behave as cached (disable interaction) while vault has not been purchased
-	return not CanUseVoidStorage() or select(6, Bagnon.ItemSlot.GetInfo(self))
+	return not CanUseVoidStorage() or Bagnon.ItemSlot.IsCached(self)
+end
+
+function ItemSlot:GetInfo()
+	local index, id, icon, locked = self:GetRawInfo()
+	local link, quality
+	
+	if id then
+		link, quality = select(2, GetItemInfo(id))
+	end
+	
+	return icon, 1, locked, quality, nil, nil, link
+end
+
+function ItemSlot:GetRawInfo()
+	if self.bag == 'vault' then
+		return self:GetID(), Bagnon.ItemSlot.GetInfo(self)
+	else
+		local get = self.bag == DEPOSIT and GetVoidTransferDepositInfo or GetVoidTransferWithdrawalInfo
+		local count = self:GetID()
+		
+		for i = 1,9 do
+			if get(i) then
+				count = count - 1
+				if count == 0 then
+					return i, get(i)
+				end
+			end
+		end
+	end
 end
 
 function ItemSlot:IsQuestItem()
@@ -113,35 +117,12 @@ function ItemSlot:IsNew()
 	return false
 end
 
-function ItemSlot:GetInfo()
-	local id, icon, locked = self:RetrieveInfo()
-	local link, quality
-	
-	if id then
-		link, quality = select(2, GetItemInfo(id))
-	end
-	
-	return icon, 1, locked, quality, nil, nil, link
+function ItemSlot:CanReuseBlizzardBagSlots()
+	return nil
 end
 
-function ItemSlot:RetrieveInfo()
-	if self.bag == 'vault' then
-		return Bagnon.ItemSlot.GetInfo(self)
-	else
-		local get = self.bag == DEPOSIT and GetVoidTransferDepositInfo or GetVoidTransferWithdrawalInfo
-		local count = self:GetID()
-		
-		for i = 1,9 do
-			if get(i) then
-				count = count - 1
-				if count == 0 then
-					return get(i)
-				end
-			end
-		end
-	end
-end
 
-function ItemSlot:GetBag()
-	return 'vault'
-end
+--[[ Fake Methods ]]--
+
+function ItemSlot:UpdateSlotColor() end
+function ItemSlot:UpdateCooldown() end

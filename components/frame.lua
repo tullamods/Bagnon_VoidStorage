@@ -78,14 +78,9 @@ function Frame:PlaceBrokerDisplayFrame()
 		local frame = self:GetBrokerDisplay() or self:CreateBrokerDisplay()
 		frame:ClearAllPoints()
 		frame:SetPoint('BOTTOMLEFT', self, 'BOTTOMLEFT', 16, 20)
-
-		if self:HasMoneyFrame() then
-			frame:SetPoint('RIGHT', self:GetMoneyFrame(), 'LEFT', -8, 10)
-		else
-			frame:SetPoint('BOTTOMRIGHT', self, 'BOTTOMRIGHT', -8, 20)
-		end
-
+		frame:SetPoint('RIGHT', self:GetMoneyFrame(), 'LEFT', -8, 10)
 		frame:Show()
+		
 		return frame:GetWidth(), 24
 	end
 
@@ -97,3 +92,6 @@ function Frame:PlaceBrokerDisplayFrame()
 end
 
 function Frame:GetSpecialButtons() end
+function Frame:HasMoneyFrame()
+	return true
+end

@@ -66,7 +66,7 @@ function ItemFrame:ReloadAllItemSlots()
 		end
 	end
 	
-	for slot = num + 1, #self.itemSlots do
+	for slot = num + 1, #self.slots do
 		self:FreeItemSlot(slot)
 	end
 
@@ -74,20 +74,21 @@ function ItemFrame:ReloadAllItemSlots()
 end
 
 function ItemFrame:AddItemSlot(slot)
-	self.itemSlots[slot] = Bagnon.VaultSlot:New(self.kind or 'vault', slot, self:GetFrameID(), self)
+	self.slots[slot] = Bagnon.VaultSlot:New()
+	self.slots[slot]:Set(self, self.kind or 'vault', slot)
 end
 
 function ItemFrame:FreeItemSlot(slot)
-	self.itemSlots[slot]:Free()
-	self.itemSlots[slot] = nil
+	self.slots[slot]:Free()
+	self.slots[slot] = nil
 end
 
 function ItemFrame:UpdateItemSlot(slot)
-	self.itemSlots[slot]:Update()
+	self.slots[slot]:Update()
 end
 
 function ItemFrame:GetItemSlot(slot)
-	return self.itemSlots[slot]
+	return self.slots[slot]
 end
 
 function ItemFrame:GetNumSlots()
