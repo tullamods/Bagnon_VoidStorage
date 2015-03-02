@@ -8,6 +8,7 @@
 
 local ItemFrame = Bagnon:NewClass('VaultItemFrame', 'Button', Bagnon.ItemFrame)
 ItemFrame.Button = Bagnon.VaultSlot
+ItemFrame.TransposeLayout = true
 
 function ItemFrame:RegisterEvents()
 	self:UnregisterEvents()
