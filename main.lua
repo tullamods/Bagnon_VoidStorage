@@ -10,7 +10,6 @@ function Vault:OnEnable()
 end
 
 function Vault:OnOpen()
-	-- Always reset to current character when interacting with a void storage NPC
 	if Bagnon:GetFrame('vault') then
 		Bagnon:GetFrame('vault'):SetPlayer(nil)
 	end
