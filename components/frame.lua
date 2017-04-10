@@ -3,10 +3,13 @@
 		A specialized version of the bagnon frame for void storage
 --]]
 
-local Frame = Bagnon:NewClass('VaultFrame', 'Frame', Bagnon.Frame)
-Frame.Title = LibStub('AceLocale-3.0'):GetLocale('Bagnon-VoidStorage').Title
-Frame.ItemFrame = Bagnon.VaultItemFrame
-Frame.MoneyFrame = Bagnon.TransferButton
+local MODULE, Module =  ...
+local ADDON, Addon = Module.ADDON, Module.Addon
+local Frame = Addon:NewClass('VaultFrame', 'Frame', Addon.Frame)
+
+Frame.Title = LibStub('AceLocale-3.0'):GetLocale(ADDON).Title
+Frame.ItemFrame = Addon.VaultItemFrame
+Frame.MoneyFrame = Addon.TransferButton
 Frame.Bags = {'vault'}
 
 Frame.OpenSound = 'UI_EtherealWindow_Open'
@@ -17,16 +20,16 @@ Frame.BrokerSpacing = 4
 --[[ Events ]]--
 
 function Frame:OnShow()
-	Bagnon.Frame.OnShow(self)
-	self:ShowTransferFrame(false)
+	Addon.Frame.OnShow(self)
+	self:RegisterFrameEvent('SHOW_TRANSFER', 'ShowTransfer')
 end
 
 function Frame:OnHide()
-	Bagnon.Frame.OnHide(self)
-	
-	StaticPopup_Hide('BAGNON_CANNOT_PURCHASE_VAULT')
-	StaticPopup_Hide('BAGNON_COMFIRM_TRANSFER')
-	StaticPopup_Hide('BAGNON_VAULT_PURCHASE')
+	Addon.Frame.OnHide(self)
+	self:CloseTransfer()
+
+	StaticPopup_Hide(ADDON .. 'CANNOT_PURCHASE_VAULT')
+	StaticPopup_Hide(ADDON .. 'VAULT_PURCHASE')
 	StaticPopup_Hide('VOID_DEPOSIT_CONFIRM')
 	CloseVoidStorageFrame()
 end
@@ -34,15 +37,14 @@ end
 
 --[[ Components ]]--
 
-function Frame:ShowTransferFrame(show)
-	self:FadeOutFrame(show and self.itemFrame or self.transferFrame)
-	self:FadeInFrame(show and self:GetTransferFrame() or self.itemFrame)
+function Frame:ShowTransfer()
+	Addon:FadeSwitch(self.itemFrame, self:GetTransferFrame())
+	StaticPopup_Show(ADDON .. 'COMFIRM_TRANSFER').data = self
+end
 
-	if show then
-		StaticPopup_Show('BAGNON_COMFIRM_TRANSFER').data = self
-	else
-		StaticPopup_Hide('BAGNON_COMFIRM_TRANSFER')
-	end
+function Frame:CloseTransfer()
+	Addon:FadeSwitch(self.transferFrame, self.itemFrame)
+	StaticPopup_Hide(ADDON .. 'COMFIRM_TRANSFER')
 end
 
 function Frame:GetTransferFrame()
@@ -50,7 +52,7 @@ function Frame:GetTransferFrame()
 end
 
 function Frame:CreateTransferFrame()
-	local frame = Bagnon.TransferFrame:New(self)
+	local frame = Addon.TransferFrame:New(self)
 	frame:SetAllPoints(self.itemFrame)
 	self.transferFrame = frame
 	return frame

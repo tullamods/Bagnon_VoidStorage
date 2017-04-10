@@ -6,17 +6,18 @@
 			WITHDRAW -> items to withdraw
 --]]
 
-local ItemFrame = Bagnon:NewClass('VaultItemFrame', 'Button', Bagnon.ItemFrame)
-ItemFrame.Button = Bagnon.VaultSlot
-ItemFrame.TransposeLayout = true
+local MODULE, Module =  ...
+local Addon = Module.Addon
+local ItemFrame = Addon:NewClass('VaultItemFrame', 'Button', Addon.ItemFrame)
+ItemFrame.Button = Addon.VaultSlot
+ItemFrame.Transposed = true
 
 function ItemFrame:RegisterEvents()
 	self:UnregisterEvents()
-	self:RegisterMessage(self:GetFrameID() .. '_PLAYER_CHANGED', 'OnShow')
+	self:RegisterFrameMessage('PLAYER_CHANGED', 'Update')
 	self:RegisterMessage('UPDATE_ALL', 'RequestLayout')
-	
+
 	if self:IsCached() then
-		self:RegisterEvent('GET_ITEM_INFO_RECEIVED', 'ForAll', 'Update')
 		self:RegisterEvent('VOID_STORAGE_OPEN', 'RegisterEvents')
 	else
 		if self:Type() == DEPOSIT then
