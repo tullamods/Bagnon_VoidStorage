@@ -4,13 +4,13 @@
 --]]
 
 
-local MODULE, Module =  ...
-local ADDON, Addon = Module.ADDON, Module.Addon
+local MODULE =  ...
+local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 Addon.VAULT_COST = 100 * 100 * 100
 
 StaticPopupDialogs[ADDON .. 'VAULT_PURCHASE'] = {
-	text = format(L.PurchaseDialog, GetCoinTextureString(Addon.VAULT_COST)),
+	text = format(L.PurchaseVault, GetCoinTextureString(Addon.VAULT_COST)),
 	button1 = UNLOCK,
 	button2 = NO,
 
@@ -25,7 +25,7 @@ StaticPopupDialogs[ADDON .. 'VAULT_PURCHASE'] = {
 }
 
 StaticPopupDialogs[ADDON .. 'CANNOT_PURCHASE_VAULT'] = {
-	text = format(L.CannotPurchaseDialog, GetCoinTextureString(Addon.VAULT_COST)),
+	text = format(L.CannotPurchaseVault, GetCoinTextureString(Addon.VAULT_COST)),
 	button1 = CHAT_LEAVE,
 	button2 = L.AskMafia,
 
@@ -46,7 +46,7 @@ StaticPopupDialogs[ADDON .. 'COMFIRM_TRANSFER'] = {
 	end,
 
 	OnCancel = function(dialog, frame)
-		frame:ShowTransferFrame(false)
+		frame:CloseTransfer()
 	end,
 
 	timeout = 0, preferredIndex = STATICPOPUP_NUMDIALOGS,

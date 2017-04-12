@@ -3,8 +3,8 @@
 		A void storage item slot button
 --]]
 
-local MODULE, Module =  ...
-local ADDON, Addon = Module.ADDON, Module.Addon
+local MODULE =  ...
+local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
 local ItemSlot = Addon:NewClass('VaultSlot', 'Button', Addon.ItemSlot)
 ItemSlot.nextID = 0
 ItemSlot.unused = {}
@@ -96,44 +96,8 @@ function ItemSlot:IsCached()
 	return not CanUseVoidStorage() or Addon.ItemSlot.IsCached(self)
 end
 
-function ItemSlot:GetInfo()
-	local id, icon, locked = self:GetRawInfo()
-	local link, quality
-	if id then
-		link, quality = select(2, GetItemInfo(id))
-	end
-
-	return icon, 1, locked and self.bag == 'vault', quality, nil, nil, link
-end
-
-function ItemSlot:GetRawInfo()
-	if self.bag == 'vault' then
-		return Addon.ItemSlot.GetInfo(self)
-	else
-		local get = self.bag == DEPOSIT and GetVoidTransferDepositInfo or GetVoidTransferWithdrawalInfo
-		local count = self:GetID()
-
-		for i = 1,9 do
-			if get(i) then
-				count = count - 1
-				if count == 0 then
-					return get(i)
-				end
-			end
-		end
-	end
-end
-
-function ItemSlot:IsQuestItem()
-	return false
-end
-
-function ItemSlot:IsNew()
-	return false
-end
-
-
---[[ Fake Methods ]]--
-
+function ItemSlot:IsQuestItem() end
+function ItemSlot:IsNew() end
+function ItemSlot:IsUpgrade() end
 function ItemSlot:UpdateSlotColor() end
 function ItemSlot:UpdateCooldown() end
