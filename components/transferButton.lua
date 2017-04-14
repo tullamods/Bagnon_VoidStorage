@@ -13,27 +13,32 @@ local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 
 function TransferButton:New (...)
 	local f = Addon.MoneyFrame.New(self, ...)
-	local b = CreateFrame('Button', nil, f, ADDON..'MenuButtonTemplate')
+	local b = CreateFrame('CheckButton', nil, f.Clicker, ADDON..'MenuCheckButtonTemplate')
 	b.Icon:SetTexture('Interface/Icons/ACHIEVEMENT_GUILDPERK_BARTERING')
 	b:SetScript('OnEnter', function() f:OnEnter() end)
 	b:SetScript('OnLeave', function() f:OnLeave() end)
 	b:SetScript('OnClick', function() f:OnClick() end)
-	b:SetPoint('RIGHT', - 3, 0)
-	b:SetSize(30, 30)
+	b:SetPoint('LEFT', f, 'RIGHT', -5, 0)
+	b:SetHitRectInsets(-30, 0, -5, -5)
+	b:SetScale(1.36)
 
 	f.Button, f.info = b, MoneyTypeInfo['STATIC']
+	f:SetSize(50, 36)
 	f:RegisterEvents()
-	f:SetHeight(36)
 
 	return f
 end
 
 
---[[ Interaction ]]--
+--[[ Frame Events ]]--
 
-function TransferButton:OnClick ()
+function TransferButton:OnToggle(_, checked)
+	self.Button:SetChecked(checked)
+end
+
+function TransferButton:OnClick()
 	if self:HasTransfer() then
-		self:SendFrameMessage('SHOW_TRANSFER')
+		self:SendFrameMessage('TRANFER_TOGGLED', self.Button:GetChecked())
 	end
 end
 
@@ -67,6 +72,7 @@ end
 --[[ Update ]]--
 
 function TransferButton:RegisterEvents()
+	self:RegisterFrameMessage('TRANFER_TOGGLED', 'OnToggle')
 	self:RegisterEvent('VOID_STORAGE_DEPOSIT_UPDATE', 'Update')
 	self:RegisterEvent('VOID_STORAGE_CONTENTS_UPDATE', 'Update')
 	self:RegisterEvent('VOID_TRANSFER_DONE', 'Update')
@@ -74,7 +80,7 @@ function TransferButton:RegisterEvents()
 end
 
 function TransferButton:Update()
-	MoneyFrame_Update(self:GetName(), self:GetMoney())
+	Addon.MoneyFrame.Update(self)
 
 	local hasTransfer = self:HasTransfer()
 	self.Button.Icon:SetDesaturated(not hasTransfer)

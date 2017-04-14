@@ -14,7 +14,8 @@ Frame.Bags = {'vault'}
 
 Frame.OpenSound = 'UI_EtherealWindow_Open'
 Frame.CloseSound = 'UI_EtherealWindow_Close'
-Frame.BrokerSpacing = 3
+Frame.MoneySpacing = 30
+Frame.BrokerSpacing = 2
 
 
 --[[ Modifications ]]--
@@ -35,31 +36,24 @@ end
 
 function Frame:RegisterMessages()
 	Addon.Frame.RegisterMessages(self)
-	self:RegisterFrameMessage('SHOW_TRANSFER', 'ShowTransfer')
-	self:RegisterFrameMessage('HIDE_TRANSFER', 'HideTransfer')
+	self:RegisterFrameMessage('TRANFER_TOGGLED', 'OnTransferToggled')
 end
 
 function Frame:OnHide()
 	Addon.Frame.OnHide(self)
-	StaticPopup_Hide(ADDON .. 'CANNOT_PURCHASE_VAULT')
-	StaticPopup_Hide(ADDON .. 'VAULT_PURCHASE')
-	StaticPopup_Hide('VOID_DEPOSIT_CONFIRM')
 	CloseVoidStorageFrame()
 end
 
+function Frame:OnTransferToggled(_, transfering)
+	self.deposit:SetShown(transfering)
+	self.withdraw:SetShown(transfering)
+	self.itemFrame:SetShown(not transfering)
 
---[[ API ]]--
-
-function Frame:ShowTransfer()
-	self.deposit:Show()
-	self.withdraw:Show()
-	self.itemFrame:Hide()
-end
-
-function Frame:HideTransfer()
-	self.itemFrame:Show()
-	self.deposit:Hide()
-	self.withdraw:Hide()
+	if transfering then
+		StaticPopup_Show(ADDON .. 'COMFIRM_TRANSFER').data = self
+	else
+		StaticPopup_Hide(ADDON .. 'COMFIRM_TRANSFER')
+	end
 end
 
 

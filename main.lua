@@ -28,4 +28,7 @@ end
 function Vault:OnClose()
 	Addon.Cache.AtVault = nil
 	Addon:HideFrame('vault')
+
+	StaticPopup_Hide(ADDON .. 'CANNOT_PURCHASE_VAULT')
+	StaticPopup_Hide(ADDON .. 'VAULT_PURCHASE')
 end

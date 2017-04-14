@@ -46,17 +46,14 @@ function ItemSlot:OnClick(button)
 			cursor:GetScript('PreClick')(cursor, 'RightButton') -- simulates a click on the button, less code to maintain
 			cursor:GetScript('OnClick')(cursor, 'RightButton')
 
-		elseif isRight and self:IsLocked() and self.withdrawSlot then
-			ClickVoidTransferWithdrawalSlot(1, self.withdrawSlot, true)
-
-		else
+		elseif isRight and self:IsLocked() then
+			local id = self:GetItemID()
 			for i = 1,9 do
-				if not GetVoidTransferWithdrawalInfo(i) then
-					self.withdrawSlot = i
-					break
+				if GetVoidTransferWithdrawalInfo(i) == id then
+						ClickVoidTransferWithdrawalSlot(i, true)
 				end
 			end
-
+		else
 			ClickVoidStorageSlot(1, self:GetID(), isRight)
 		end
 	end
