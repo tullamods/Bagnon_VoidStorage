@@ -5,15 +5,16 @@
 
 local MODULE =  ...
 local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
-local TransferButton = Addon:NewClass('TransferButton', 'Button', Addon.MoneyFrame)
 local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
+local TransferButton = Addon:NewClass('TransferButton', 'Button', Addon.MoneyFrame)
+TransferButton.Type = 'STATIC'
 
 
 --[[ Constructor ]]--
 
 function TransferButton:New (...)
 	local f = Addon.MoneyFrame.New(self, ...)
-	local b = CreateFrame('CheckButton', nil, f.Clicker, ADDON..'MenuCheckButtonTemplate')
+	local b = CreateFrame('CheckButton', nil, f.overlay, ADDON..'MenuCheckButtonTemplate')
 	b.Icon:SetTexture('Interface/Icons/ACHIEVEMENT_GUILDPERK_BARTERING')
 	b:SetScript('OnEnter', function() f:OnEnter() end)
 	b:SetScript('OnLeave', function() f:OnLeave() end)
@@ -22,7 +23,7 @@ function TransferButton:New (...)
 	b:SetHitRectInsets(-30, 0, -5, -5)
 	b:SetScale(1.36)
 
-	f.Button, f.info = b, MoneyTypeInfo['STATIC']
+	f.Button = b
 	f:SetSize(50, 36)
 	f:RegisterEvents()
 
@@ -82,13 +83,15 @@ end
 function TransferButton:Update()
 	Addon.MoneyFrame.Update(self)
 
-	local hasTransfer = self:HasTransfer()
-	self.Button.Icon:SetDesaturated(not hasTransfer)
-	self.Button:EnableMouse(hasTransfer)
+	if self.Button then
+		local hasTransfer = self:HasTransfer()
+		self.Button.Icon:SetDesaturated(not hasTransfer)
+		self.Button:EnableMouse(hasTransfer)
+	end
 end
 
 function TransferButton:HasTransfer()
-	return (GetNumVoidTransferWithdrawal() + GetNumVoidTransferDeposit()) > 0
+	return not self:IsCached() and (GetNumVoidTransferWithdrawal() + GetNumVoidTransferDeposit()) > 0
 end
 
 function TransferButton:GetMoney()

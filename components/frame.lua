@@ -86,8 +86,9 @@ function Frame:GetRawInfo(bag, slot)
 	end
 end
 
-function Frame:GetSpecialButtons() end
-function Frame:HasBagFrame() end
+function Frame:IsBagFrameShown() end
+function Frame:HasSortButton() end
+function Frame:HasBagToggle() end
 function Frame:HasMoneyFrame()
 	return true
 end
