@@ -10,12 +10,12 @@ local L = LibStub('AceLocale-3.0'):GetLocale(ADDON)
 Addon.VAULT_COST = 100 * 100 * 100
 
 StaticPopupDialogs[ADDON .. 'VAULT_PURCHASE'] = {
-	text = format(L.PurchaseVault, GetCoinTextureString(Addon.VAULT_COST)),
+	text = format(L.PurchaseVault, GetMoneyString(Addon.VAULT_COST, true)),
 	button1 = UNLOCK,
 	button2 = NO,
 
 	OnAccept = function(self)
-		PlaySound('UI_Voidstorage_Unlock')
+		PlaySound(SOUNDKIT.UI_VOID_STORAGE_UNLOCK)
 		UnlockVoidStorage()
 	end,
 
@@ -25,7 +25,7 @@ StaticPopupDialogs[ADDON .. 'VAULT_PURCHASE'] = {
 }
 
 StaticPopupDialogs[ADDON .. 'CANNOT_PURCHASE_VAULT'] = {
-	text = format(L.CannotPurchaseVault, GetCoinTextureString(Addon.VAULT_COST)),
+	text = format(L.CannotPurchaseVault, GetMoneyString(Addon.VAULT_COST, true)),
 	button1 = CHAT_LEAVE,
 	button2 = L.AskMafia,
 
