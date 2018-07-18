@@ -1,5 +1,5 @@
-## Interface: 70300
-## Title: |cff20ff20Bagnon Void Storage|r
+## Interface: 80000
+## Title: Bagnon Void Storage
 ## Author: Jaliborc (João Cardoso)
 ## Notes: Single window display for your void storage
 ## RequiredDeps: Bagnon

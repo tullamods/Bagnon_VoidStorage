@@ -24,11 +24,11 @@ function Frame:New(id)
 	local f = Addon.Frame.New(self, id)
 
 	f.deposit = self.ItemFrame:New(f, {DEPOSIT}, DEPOSIT)
-	f.deposit:SetPoint('TOPLEFT', 10, -55)
+	f.deposit:SetPoint('TOPLEFT', 10, -50)
 	f.deposit:Hide()
 
 	f.withdraw = self.ItemFrame:New(f, {WITHDRAW}, WITHDRAW)
-	f.withdraw:SetPoint('TOPLEFT', f.deposit, 'BOTTOMLEFT', 0, -5)
+	f.withdraw:SetPoint('TOPLEFT', f.deposit, 'BOTTOMLEFT')
 	f.withdraw:Hide()
 
 	return f
@@ -60,23 +60,29 @@ end
 --[[ Properties ]]--
 
 function Frame:GetItemInfo(bag, slot)
+	local id, icon, locked = self:GetRawInfo(bag, slot)
+	local link, quality
+	if id then
+		link, quality = select(2, GetItemInfo(id))
+	end
+
+	return icon, 1, locked and bag == 'vault', quality, nil, nil, link
+end
+
+function Frame:GetRawInfo(bag, slot)
 	if bag == 'vault' then
-		return Addon.Frame:GetItemInfo(bag, slot)
+		return Addon.Cache:GetItemInfo(self.player, bag, slot)
 	else
 		local get = bag == DEPOSIT and GetVoidTransferDepositInfo or GetVoidTransferWithdrawalInfo
-		local item = {}
 
 		for i = 1,9 do
 			if get(i) then
 				slot = slot - 1
 				if slot == 0 then
-					item.id, item.icon, item._, item.recent, item.filtered, item.quality = get(i)
-					return item
+					return get(i)
 				end
 			end
 		end
-
-		return item
 	end
 end
 

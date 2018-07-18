@@ -3,18 +3,18 @@
 		The bagnon driver thingy
 --]]
 
-local MODULE, Module =  ...
+local MODULE =  ...
 local ADDON, Addon = MODULE:match('[^_]+'), _G[MODULE:match('[^_]+')]
-local Vault = LibStub('AceAddon-3.0'):NewAddon(Module, MODULE, 'AceEvent-3.0')
+local Vault = Bagnon:NewModule('VoidStorage', Addon)
 
 function Vault:OnEnable()
-	self:RegisterMessage('CACHE_VAULT_OPENED', 'OnOpen')
-	self:RegisterMessage('CACHE_VAULT_CLOSED', 'OnClose')
+	self:RegisterEvent('VOID_STORAGE_CLOSE', 'OnClose')
 end
 
 function Vault:OnOpen()
 	IsVoidStorageReady()
-	Addon:ShowFrame('vault'):SetOwner(nil)
+	Addon.Cache.AtVault = true
+	Addon:ShowFrame('vault'):SetPlayer(nil)
 
 	if not CanUseVoidStorage() then
 		if Addon.VAULT_COST > GetMoney() then
@@ -26,7 +26,9 @@ function Vault:OnOpen()
 end
 
 function Vault:OnClose()
+	Addon.Cache.AtVault = nil
 	Addon:HideFrame('vault')
+
 	StaticPopup_Hide(ADDON .. 'CANNOT_PURCHASE_VAULT')
 	StaticPopup_Hide(ADDON .. 'VAULT_PURCHASE')
 end

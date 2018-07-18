@@ -33,8 +33,9 @@ end
 
 function ItemSlot:OnClick(button)
 	if IsModifiedClick() then
-		if self.info.link then
-			HandleModifiedItemClick(self.info.link)
+		local _,_,_,_,_,_, link = self:GetInfo()
+		if link then
+			HandleModifiedItemClick(link)
 		end
 	elseif self.bag == 'vault' and not self:IsCached() then
 		local isRight = button == 'RightButton'
@@ -45,9 +46,10 @@ function ItemSlot:OnClick(button)
 			cursor:GetScript('PreClick')(cursor, 'RightButton') -- simulates a click on the button, less code to maintain
 			cursor:GetScript('OnClick')(cursor, 'RightButton')
 
-		elseif isRight and self.info.locked then
+		elseif isRight and self:IsLocked() then
+			local id = self:GetItemID()
 			for i = 1,9 do
-				if GetVoidTransferWithdrawalInfo(i) == self.info.id then
+				if GetVoidTransferWithdrawalInfo(i) == id then
 						ClickVoidTransferWithdrawalSlot(i, true)
 				end
 			end
